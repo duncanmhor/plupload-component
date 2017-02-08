@@ -1,0 +1,21 @@
+{
+  "name": "UploadTest",
+  "authors": [
+    "Duncan Lundie <duncanmhor@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-plupload": "^0.1.6"
+  }
+}
