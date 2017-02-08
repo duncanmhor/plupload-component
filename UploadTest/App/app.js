@@ -15,7 +15,7 @@
         pluploadOptionProvider.setOptions({
             flash_swf_url: '/bower_components/plupload/js/Moxie.swf',
             silverlight_xap_url: '/bower_components/plupload/js/Moxie.xap',
-            max_file_size: '10mb',
+            max_file_size: '1mb',
 
         });
     });
