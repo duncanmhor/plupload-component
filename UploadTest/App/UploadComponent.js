@@ -3,28 +3,33 @@ app.component('uploadComponent', {
     
     // isolated scope binding
     bindings: {
-        message: '@',
+        label: '@',
         url: '@',
-        loading: '=',
+        loading: '=?',
         progress: '=?'
 
     },
 
     // Inline template which is binded to message variable
     // in the component controller
-    template: '<a class="btn btn-primary" plupload-options="$ctrl.fileUpload.options" plupload-callbacks="$ctrl.fileUpload.callbacks" plupload="$ctrl.url">{{$ctrl.message}}</a><p>{{$ctrl.progress}}</p>',
+    templateUrl: '/App/UploadTemplate.html',
 
     // The controller that handles our component logic
     controller: UploadComponentController
 
 });
 function UploadComponentController($timeout) {
-    this.message = "";
-    this.url = "";
-  
+
+    var self = this;
+    self.label = "";
+    self.url = "";
+
+    self.files = [];
+    self.currentFile = {};
     this.$onInit = function () {
-        this.progress = 0;
-        this.fileUpload = {
+        
+        self.progress = 0;
+        self.fileUpload = {
             url: this.url,
             options: {
               filters: {
@@ -34,28 +39,42 @@ function UploadComponentController($timeout) {
             callbacks: {
                 queueChanged: function(uploader) {
                     console.log('Queue Changed');
-                    console.log(uploader);
+                    self.files = self.files.concat(uploader.files);
+                    console.log(self.files);
                 },
                 filesAdded: function (uploader, files) {
-                    this.loading = true;
-                    console.log('Files added');
-                    console.log(files);
+                    self.loading = true;
                     $timeout(function () {
                         uploader.start();
                     }, 1);
                 },
                 uploadProgress: function (uploader, file) {
-                    var percentage = file.percent / 100.0;
-                    console.log(percentage);
-                    this.progress = percentage;
+                  
                 },
                 fileUploaded: function (uploader, file, response) {
-                   this.loading = false;
-                    alert('Upload Complete!');
+                   self.loading = false;
+                   file.uploadedSuccessfully = true;
+                    console.log(response);
+                    },
+                uploadFile: function(uploader, file) {
+                    self.currentFile = file;
                 },
                 error: function (uploader, error) {
-                   this.loading = false;
-                    alert(error.message);
+                    self.loading = false;
+                    console.log(error);
+                    console.log(self.currentFile);
+                   
+                    if (error.response) {
+                        self.currentFile.uploadError = JSON.parse(error.response).Message;
+                    } else {
+                        if (error.file) {
+                            self.currentFile = error.file;
+                            self.files.push(self.currentFile);
+                        }
+                        self.currentFile.uploadError = error.message;
+                    }
+                    self.currentFile.uploadFailed = true;
+                    console.log(self.currentFile);
                 }
             }
         }

@@ -32,6 +32,9 @@ namespace AngularJSWebApiEmpty.Controllers
                 // This illustrates how to get the file names.
                 foreach (MultipartFileData file in provider.FileData)
                 {
+                    if (file.Headers.ContentDisposition.FileName.Contains("error"))
+                        return Request.CreateErrorResponse(HttpStatusCode.InternalServerError,
+                            "This file has been identified as an error test");
                     Trace.WriteLine(file.Headers.ContentDisposition.FileName);
                     Trace.WriteLine("Server file path: " + file.LocalFileName);
                 }

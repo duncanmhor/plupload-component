@@ -1,0 +1,29 @@
+﻿
+<div class="row">
+    <div class="col-xs-2">
+        <a class="btn btn-primary" plupload-options="$ctrl.fileUpload.options" plupload-callbacks="$ctrl.fileUpload.callbacks" plupload="$ctrl.url">{{$ctrl.label}}</a>
+    </div>
+    <div class="col-xs-10">
+        <div ng-repeat="file in $ctrl.files track by $index" class="row">
+            <div class="col-xs-4">
+                {{file.name}}
+            </div>
+            <div class="col-xs-7" ng-show="!file.uploadFailed">
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow='{{file.percent}}'
+                         aria-valuemin="0" aria-valuemax="100" ng-style="{width: (file.percent + '%')}">
+                        {{file.percent}}%
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-7" ng-show="file.uploadFailed">
+                <div class="alert alert-danger">{{file.uploadError}}</div>
+                
+            </div>
+                <div class="col-xs-1">
+                    <i ng-show="file.uploadedSuccessfully" class="glyphicon glyphicon-ok-sign"></i>
+                    <i ng-show="file.uploadFailed" tooltip class="glyphicon glyphicon-warning-sign"></i>
+                </div>
+            </div>
+    </div>
+</div>
